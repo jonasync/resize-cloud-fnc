@@ -1,0 +1,19 @@
+{
+  "name": "inditex-node",
+  "version": "1.0.0",
+  "description": "Inditex test",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "test"
+  },
+  "author": "Jonathan Martín Pinero",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "firebase-admin": "^11.9.0"
+  }
+}
