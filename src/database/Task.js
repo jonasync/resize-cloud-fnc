@@ -4,26 +4,42 @@ const {db} = require('./index');
 
 const tasksRef = db.collection('tasks');
 
-const getTaskById = async () => {
-    const taskIDRef = await tasksRef.doc('keurXh4Zh0qM0hnIUKA6')
-    const task = await taskIDRef.get();
-    if (!task.exists) {
-        console.log('No such document!');
-        return {};
-      } else {
-        const res = task.data();
-        console.log(res);
-        return res;
-      }
+
+const TASK_STATUS = {
+    UPLOADING: "UPLOADING",
+    CREATING_THUMBNAILS: "CREATING_THUMBNAILS",
+    PROCESSING: "PROCESSING",
+    DONE: "DONE",
+    FAILED: "FAILED"
+}
+
+const getTaskById = async (taskId) => {
+    try {
+        const taskIDRef = await tasksRef.doc(taskId)
+        const task = await taskIDRef.get();
+        if (!task.exists) {
+            throw { status: 404, message: 'Task not found' }
+        } else {
+            return task.data();
+        }
+    } catch (error) {
+        throw { status: 500, message: error.message || error }
+    }
 }
 
 const createTask = async (task) => {
-    const newTask = await tasksRef.add(task);
-    console.log(task)
-    return task;
+    try {
+        await tasksRef.doc(task.id).set(task);
+        return task;
+    } catch (error) {
+        throw { status: 500, message: error.message || error    }
+    }
 }
+
 
 module.exports = {
     getTaskById,
-    createTask
+    createTask,
+
+    TASK_STATUS
 };
