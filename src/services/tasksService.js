@@ -1,4 +1,5 @@
 const Task = require('../database/Task');
+const {v4: uuid} = require('uuid')
 
 
 const getTaskById = () => { 
@@ -6,8 +7,14 @@ const getTaskById = () => {
     return task; 
 };
 
-const postTask = () => { 
-    const taskCreated = Task.createTask()
+const postTask = (task) => { 
+    const taskToInsert = {
+        ...task,
+        id: uuid(),
+        createdAt: new Date().toLocaleString("en-US", {timezone: "UTC"}),
+        updatedAt: new Date().toLocaleString("en-US", {timezone: "UTC"})
+    }
+    const taskCreated = Task.createTask(taskToInsert)
     return taskCreated; 
 };
 

@@ -11,17 +11,16 @@ const getTaskById = async () => {
         console.log('No such document!');
         return {};
       } else {
-        console.log('Document data:', task.data());
-        return task;
+        const res = task.data();
+        console.log(res);
+        return res;
       }
 }
 
-const createTask = async () => {
-    return await tasksRef.add({
-        timestamp: '',
-        path: '/../../',
-        status: 1815
-    });
+const createTask = async (task) => {
+    const newTask = await tasksRef.add(task);
+    console.log(task)
+    return task;
 }
 
 module.exports = {

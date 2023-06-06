@@ -5,8 +5,6 @@ const serviceAccount = require("./credentials.json");
 
 initializeApp({
   credential: cert(serviceAccount)
-    // credential: applicationDefault(),
-    // databaseURL: "https://taskl-default-rtdb.firebaseio.com/"
 });
 
 const db = getFirestore();
