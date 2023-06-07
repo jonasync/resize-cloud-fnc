@@ -1,8 +1,8 @@
 const Task = require('../database/Task');
 const path = require('path');
 const fs = require('fs');
-const { getPath } = require('../utils/images');
-const { getImageInfo, saveImage } = require('../database/Image');
+const { getImageInfo, getPath } = require('../utils/images');
+const { saveImage } = require('../database/Image');
 
 
 const getTaskById = (taskId) => { 

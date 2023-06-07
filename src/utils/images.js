@@ -28,7 +28,25 @@ const getPath = (imageFile, md5AsNewName, widthAsFolderName = ORIGINAL_FOLDER) =
     }
 }
 
+const getImageInfo = (data) => {
+    
+    const now = new Date().toLocaleString("en-US", {timezone: "UTC"});
+    const {md5, path, file} = data
+    const {width, height} = getResolutionFromBuffer(file.data)
+    return {
+        id: md5,
+        md5,
+        resolution: {
+            width, height
+        },
+        path,
+        createdAt: now,
+        updatedAt: now
+    }
+}
+
 module.exports = {
     getResolutionFromBuffer,
+    getImageInfo,
     getPath
 }
