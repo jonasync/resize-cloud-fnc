@@ -6,8 +6,6 @@ const tasksRef = db.collection('tasks');
 
 
 const TASK_STATUS = {
-    UPLOADING: "UPLOADING",
-    CREATING_THUMBNAILS: "CREATING_THUMBNAILS",
     PROCESSING: "PROCESSING",
     DONE: "DONE",
     FAILED: "FAILED"
@@ -42,7 +40,7 @@ const newTask = (data) => {
     return {
         id,
         path,
-        status: data.status || TASK_STATUS.UPLOADING,
+        status: data.status || TASK_STATUS.PROCESSING,
         createdAt: now,
         updatedAt: now
     }
