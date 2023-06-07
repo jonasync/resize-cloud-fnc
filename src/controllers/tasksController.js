@@ -11,7 +11,7 @@ const getTaskById = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const {file} = req.files;
+    const {file} = req.files || {};
     
     if(!file) return res.status(400).send({status: 'FAILED', data: { error: "The File is empty"}});
     
