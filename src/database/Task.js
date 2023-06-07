@@ -27,7 +27,7 @@ const getTaskById = async (taskId) => {
     }
 }
 
-const createTask = async (task) => {
+const saveTask = async (task) => {
     try {
         await tasksRef.doc(task.id).set(task);
         return task;
@@ -36,10 +36,23 @@ const createTask = async (task) => {
     }
 }
 
+const newTask = (data) => {
+    const now = new Date().toLocaleString("en-US", {timezone: "UTC"});
+    const {id, path} = data
+    return {
+        id,
+        path,
+        status: data.status || TASK_STATUS.UPLOADING,
+        createdAt: now,
+        updatedAt: now
+    }
+}
+
 
 module.exports = {
     getTaskById,
-    createTask,
+    newTask,
+    saveTask,
 
     TASK_STATUS
 };

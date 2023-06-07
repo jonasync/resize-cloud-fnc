@@ -1,6 +1,6 @@
 const Task = require('../database/Task');
-const {v4: uuid} = require('uuid')
 const path = require('path');
+const fs = require('fs')
 
 
 const getTaskById = (taskId) => { 
@@ -12,17 +12,16 @@ const postTask = async (file) => {
 
     const filename = file.name.toLowerCase()
     const originalImagePath = path.join('./originals/', filename)
+    const md5 = file.md5;
+    
+    if(!fs.existsSync('./originals/')) fs.mkdirSync('./originals/')  
     
     await file.mv(originalImagePath, async (err) => {
         if(err) throw { status: err?.status || 500, message: err?.message || 'Error moving files'}
     })
-    const taskToInsert = {
-        id: uuid(),
-        status: Task.TASK_STATUS.UPLOADING,
-        createdAt: new Date().toLocaleString("en-US", {timezone: "UTC"}),
-        updatedAt: new Date().toLocaleString("en-US", {timezone: "UTC"})
-    }
-    const taskCreated = Task.createTask(taskToInsert)
+
+    const taskToInsert = Task.newTask({ id: md5, path: 's'})
+    const taskCreated = Task.saveTask(taskToInsert)
     return taskCreated; 
 };
 
