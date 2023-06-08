@@ -1,25 +1,26 @@
 const sizeOf = require("buffer-image-size");
+const crypto = require('crypto');
 const path = require('path');
 
 const ORIGINAL_FOLDER = 'original'
 const OUTPUT_PATH = './output'
 
 const getResolutionFromBuffer = (imageBuffer) => {
-    let resolution = {
-        width: null,
-        height: null
-    };
+    let resolution = {};
     try {
         resolution = sizeOf(imageBuffer);
     } catch (err) {
         throw new Error(`Imposible to get resolution: ${err.message || err}`);
     }
-    return resolution;
+    return {
+        width: resolution.width || null,
+        height: resolution.height || null
+    };
 }
 
-const getPath = (imageFile, md5AsNewName, widthAsFolderName = ORIGINAL_FOLDER) => {
-    const fileExt = path.extname(imageFile.name)
-    const fileName = path.basename(imageFile.name, fileExt)
+const getPath = (imageName, md5AsNewName, widthAsFolderName = ORIGINAL_FOLDER) => {
+    const fileExt = path.extname(imageName)
+    const fileName = path.basename(imageName, fileExt)
     const newPath = path.join(OUTPUT_PATH, fileName, widthAsFolderName);
     const finalPath = path.join(newPath, `${md5AsNewName}${fileExt}`);
     return {
@@ -31,8 +32,9 @@ const getPath = (imageFile, md5AsNewName, widthAsFolderName = ORIGINAL_FOLDER) =
 const getImageInfo = (data) => {
     
     const now = new Date().toLocaleString("en-US", {timezone: "UTC"});
-    const {md5, path, file} = data
-    const {width, height} = getResolutionFromBuffer(file.data)
+    const {path, file} = data
+    const {width, height} = getResolutionFromBuffer(file)
+    const md5 = getHash(file)
     return {
         id: md5,
         md5,
@@ -45,8 +47,14 @@ const getImageInfo = (data) => {
     }
 }
 
+
+const getHash = (bufferImage) => {
+  return crypto.createHash("md5").update(bufferImage).digest("hex")
+};
+
 module.exports = {
     getResolutionFromBuffer,
     getImageInfo,
-    getPath
+    getPath,
+    getHash
 }
