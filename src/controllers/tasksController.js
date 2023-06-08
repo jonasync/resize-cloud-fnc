@@ -14,8 +14,8 @@ const createTask = async (req, res) => {
     const {file} = req.files || {};
     
     if(!file) return res.status(400).send({status: 'FAILED', data: { error: "The File is empty"}});
-    
     if(file instanceof Array) return res.status(400).send({status: 'FAILED', data: { error: "You must to select one image"}});
+    if(!file.mimetype.startsWith('image')) return res.status(400).send({status: 'FAILED', data: { error: "You must to select a image type file"}});
 
     try {
         const postedTask = await taskService.postTask(file);
