@@ -19,7 +19,7 @@ const createTask = async (req, res) => {
 
     try {
         const postedTask = await taskService.postTask(file);
-        res.status(201).send({status: 200, data: postedTask});
+        res.status(201).send({status: 200, data: {task: postedTask.id}});
     } catch (error) {
         res.status(error.status || 500).send({status: "FAILED", data: {error: error.message || error}})
     }

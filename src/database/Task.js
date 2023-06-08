@@ -5,6 +5,19 @@ const { STATUS } = require('../utils/CONSTANTS');
 
 const tasksRef = db.collection('tasks');
 
+const getTasksWhere = async (field, compare, value) => {
+    let results = [];
+    const docs = await tasksRef.where(field, compare, value).get();
+
+    if (!docs.empty) { 
+        console.log(`founded ${docs.lenght} results`); 
+        docs.forEach(child => {
+            results.push(child.data())
+        });
+    }
+    return results;
+}
+
 const getTaskById = async (taskId) => {
     try {
         const taskIDRef = await tasksRef.doc(taskId)
@@ -55,5 +68,6 @@ module.exports = {
     getTaskById,
     newTask,
     saveTask,
-    updateTaskById
+    updateTaskById,
+    getTasksWhere
 };

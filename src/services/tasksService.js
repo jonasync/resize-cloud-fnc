@@ -8,9 +8,21 @@ const { STATUS } = require('../utils/CONSTANTS');
 
 
 
-const getTaskById = (taskId) => { 
-    const task = Task.getTaskById(taskId);
-    return task; 
+const getTaskById = async (taskId) => { 
+    const task = await Task.getTaskById(taskId);
+    let childrens = await Task.getTasksWhere('parentId', '==', taskId);
+    if(childrens.length) {
+        childrens = childrens.map(img => { 
+            return {id: img.id, status: img.status}
+        });
+    }
+    return {
+        task: {
+            id: task.id,
+            status: task.status
+        },
+        childrens
+    }; 
 };
 
 const postTask = async (file) => {
@@ -36,7 +48,7 @@ const postTask = async (file) => {
     await saveImage(imageInfo)
     
     try {
-        // Launch the resize image and response immediately
+        // Launch the resize image but response immediately
         createResizedVersions(md5, file.data, fileName);
     } catch (err) {
         console.error(err)
