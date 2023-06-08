@@ -11,5 +11,5 @@ const PORT = process.env.PORT || 3000;
 app.use('/api/v1/task', v1TasklRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`✅ Server running on port ${PORT}`);
 })

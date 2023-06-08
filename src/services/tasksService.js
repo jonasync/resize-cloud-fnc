@@ -1,8 +1,11 @@
-const Task = require('../database/Task');
-const path = require('path');
 const fs = require('fs');
+
+const Task = require('../database/Task');
 const { getImageInfo, getPath } = require('../utils/images');
 const { saveImage } = require('../database/Image');
+const { createResizedVersions } = require('./resizeServiceOnCloud');
+const { STATUS } = require('../utils/CONSTANTS');
+
 
 
 const getTaskById = (taskId) => { 
@@ -12,7 +15,8 @@ const getTaskById = (taskId) => {
 
 const postTask = async (file) => {
     
-    const { finalPath, newPath } = getPath(file, file.md5)
+    const fileName = file.name;
+    const { finalPath, newPath } = getPath(fileName, file.md5)
 
     // Create new path
     fs.mkdirSync(newPath, { recursive: true }); 
@@ -24,12 +28,20 @@ const postTask = async (file) => {
 
     const md5 = file.md5;
     // Save new task on database(firebase)
-    const taskToInsert = Task.newTask({ id: md5, path: finalPath, status: Task.TASK_STATUS.DONE})
+    const taskToInsert = Task.newTask({ id: md5, path: finalPath, status: STATUS.PENDING})
     const taskCreated = await Task.saveTask(taskToInsert)
     
     // Save new image on database(firebase)
-    const imageInfo = getImageInfo({file, path: finalPath, md5});
+    const imageInfo = getImageInfo({file: file.data, path: finalPath, md5});
     await saveImage(imageInfo)
+    
+    try {
+        // Launch the resize image and response immediately
+        createResizedVersions(md5, file.data, fileName);
+    } catch (err) {
+        console.error(err)
+        throw { status: err?.status || 500, message: err?.message || 'Error resizing images'}
+    }
     return taskCreated; 
 };
 
