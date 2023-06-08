@@ -1,15 +1,9 @@
 
 const {db} = require('./index');
+const { STATUS } = require('../utils/CONSTANTS');
 
 
 const tasksRef = db.collection('tasks');
-
-
-const TASK_STATUS = {
-    PROCESSING: "PROCESSING",
-    DONE: "DONE",
-    FAILED: "FAILED"
-}
 
 const getTaskById = async (taskId) => {
     try {
@@ -40,7 +34,7 @@ const newTask = (data) => {
     return {
         id,
         path,
-        status: data.status || TASK_STATUS.PROCESSING,
+        status: data.status || STATUS.PROCESSING,
         createdAt: now,
         updatedAt: now
     }
@@ -50,7 +44,5 @@ const newTask = (data) => {
 module.exports = {
     getTaskById,
     newTask,
-    saveTask,
-
-    TASK_STATUS
+    saveTask
 };

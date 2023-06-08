@@ -1,9 +1,9 @@
-const sizeOf = require("buffer-image-size");
 const crypto = require('crypto');
+
+const sizeOf = require("buffer-image-size");
 const path = require('path');
 
-const ORIGINAL_FOLDER = 'original'
-const OUTPUT_PATH = './output'
+const { ORIGINAL_FOLDER, OUTPUT_PATH } = require("./CONSTANTS");
 
 const getResolutionFromBuffer = (imageBuffer) => {
     let resolution = {};
