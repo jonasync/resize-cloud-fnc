@@ -27,8 +27,8 @@ const getTaskById = async (taskId) => {
         } else {
             return task.data();
         }
-    } catch (error) {
-        throw { status: 500, message: error.message || error }
+    } catch (err) {
+        throw { status: err?.status || 500, message: err.message || err }
     }
 }
 
