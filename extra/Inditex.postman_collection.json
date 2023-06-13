@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "058ca2d6-d658-4869-96ef-71beebdbe96c",
+		"name": "Inditex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14386490"
+	},
+	"item": [
+		{
+			"name": "GET task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/task/{{lastPostedTasks}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task",
+						"{{lastPostedTasks}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"lastPostedTasks\", jsonData.data.task);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/jon/Desktop/images/md.webp"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/task",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOCAL || CloudFunction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/jon/Desktop/images/wallpaperbetter.com_1920x1080.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://us-central1-kds-pruebastec.cloudfunctions.net/function-jon-resize",
+					"protocol": "https",
+					"host": [
+						"us-central1-kds-pruebastec",
+						"cloudfunctions",
+						"net"
+					],
+					"path": [
+						"function-jon-resize"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "lastPostedTasks",
+			"value": "a84880129c883031c2dc23eb413cbacb"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}
